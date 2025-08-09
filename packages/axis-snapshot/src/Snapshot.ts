@@ -18,9 +18,9 @@ export class Snapshot {
      * @throws {UnauthorizedError} User is not authorized to perform operation.
      * @throws {RequestError} Request failed.
      */
-    public async bmp(options?: SnapshotOptions): Promise<Buffer> {
-        const request = new BmpRequest(this.connection, options);
-        const response = await request.send();
+    public async bmp(snapshotOpts?: SnapshotOptions, opts?: { signal?: AbortSignal }): Promise<Buffer> {
+        const request = new BmpRequest(this.connection, snapshotOpts);
+        const response = await request.send({ signal: opts?.signal });
 
         return response;
     }
@@ -30,9 +30,9 @@ export class Snapshot {
      * @throws {UnauthorizedError} User is not authorized to perform operation.
      * @throws {RequestError} Request failed.
      */
-    public async jpeg(options?: SnapshotOptions): Promise<Buffer> {
-        const request = new JpegRequest(this.connection, options);
-        const response = await request.send();
+    public async jpeg(snapshotOpts?: SnapshotOptions, opts?: { signal?: AbortSignal }): Promise<Buffer> {
+        const request = new JpegRequest(this.connection, snapshotOpts);
+        const response = await request.send({ signal: opts?.signal });
 
         return response;
     }

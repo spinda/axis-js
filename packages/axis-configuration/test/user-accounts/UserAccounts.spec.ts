@@ -1,6 +1,6 @@
 import { ExpectationError } from '@fantasticfiasco/expect';
 import { Connection, Protocol, RequestError, UnauthorizedError, UnknownError } from 'axis-core';
-import * as nock from 'nock';
+import nock from 'nock';
 import { AccessRights, User, UserAccounts, UserAlreadyExistsError } from '../../src';
 import { Generate } from './Generate';
 import {

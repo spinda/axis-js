@@ -1,6 +1,6 @@
-import { DeviceResponse, UnknownError } from 'axis-core';
+import { HtmlDeviceResponse, UnknownError } from 'axis-core';
 
-export class RemoveUserResponse extends DeviceResponse {
+export class RemoveUserResponse extends HtmlDeviceResponse {
     private static readonly SuccessResponse = /Removed account .*\./;
 
     constructor(response: string) {

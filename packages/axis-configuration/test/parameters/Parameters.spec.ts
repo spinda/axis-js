@@ -1,6 +1,6 @@
 import { ExpectationError } from '@fantasticfiasco/expect';
 import { Connection, Protocol, RequestError, UnauthorizedError } from 'axis-core';
-import * as nock from 'nock';
+import nock from 'nock';
 import { Parameters, UpdateParametersError } from '../../src';
 
 describe('parameters', () => {

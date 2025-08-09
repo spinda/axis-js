@@ -10,8 +10,8 @@ export class UnknownError extends Error {
         /**
          * The error message.
          */
-        message: string
+        message: string,
     ) {
-        super(message);
+        super(message || 'Unknown Axis device error');
     }
 }

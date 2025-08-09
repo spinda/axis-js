@@ -1,7 +1,9 @@
-import * as got from 'got';
-import { get } from './client';
+import * as got from 'got-cjs-compat';
+import { RequestOpts, get, post } from './client';
 import { Connection } from './Connection';
 import { RequestError, UnauthorizedError } from './errors';
+
+export { RequestOpts };
 
 /**
  * Abstract class describing a HTTP request.
@@ -22,9 +24,35 @@ export abstract class DeviceRequest {
      * Sends a HTTP GET request to a device.
      * @param relativePath The relative path.
      */
-    protected async get(relativePath: string): Promise<Buffer> {
+    protected async get(relativePath: string, opts?: RequestOpts): Promise<Buffer> {
         try {
-            const res = await get(this.connection, relativePath);
+            const res = await get(this.connection, relativePath, opts);
+            return res.body;
+        } catch (error) {
+            if (error instanceof got.HTTPError && error.response.statusCode === 401) {
+                throw new UnauthorizedError();
+            }
+            if (error instanceof got.RequestError) {
+                throw new RequestError(error, error.message, error.code);
+            }
+
+            // Fallback
+            throw error;
+        }
+    }
+
+    /**
+     * Sends a HTTP POST request to a device.
+     * @param relativePath The relative path.
+     * @param body The request body. Plain objects are submitted as JSON.
+     */
+    protected async post(
+        relativePath: string,
+        body: string | object | Buffer | FormData,
+        opts?: RequestOpts,
+    ): Promise<Buffer> {
+        try {
+            const res = await post(this.connection, relativePath, body, opts);
             return res.body;
         } catch (error) {
             if (error instanceof got.HTTPError && error.response.statusCode === 401) {

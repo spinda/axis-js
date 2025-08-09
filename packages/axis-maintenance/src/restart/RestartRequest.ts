@@ -6,8 +6,8 @@ export class RestartRequest extends DeviceRequest {
         super(connection);
     }
 
-    public async send(): Promise<RestartResponse> {
-        const response = await this.get(this.relativePath);
+    public async send(opts?: { signal?: AbortSignal }): Promise<RestartResponse> {
+        const response = await this.get(this.relativePath, { signal: opts?.signal });
 
         return new RestartResponse(response.toString());
     }

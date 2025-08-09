@@ -42,10 +42,12 @@
   },
   "dependencies": {
     "cheerio": "1.0.0",
-    "got": "11.8.6",
+    "form-data-encoder": "^4.1.0",
+    "got-cjs-compat": "14.4.5",
     "uuid": "11.0.3"
   },
   "devDependencies": {
+    "@tsconfig/node20": "^20.1.6",
     "@types/cheerio": "0.22.35",
     "@types/express": "5.0.0",
     "@types/jest": "29.5.14",

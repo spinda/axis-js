@@ -1,6 +1,6 @@
-import { DeviceResponse, UnknownError } from 'axis-core';
+import { HtmlDeviceResponse, UnknownError } from 'axis-core';
 
-export class UpdateUserResponse extends DeviceResponse {
+export class UpdateUserResponse extends HtmlDeviceResponse {
     private static readonly SuccessResponse = /Modified account .*\./;
 
     constructor(response: string) {

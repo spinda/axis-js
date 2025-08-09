@@ -6,8 +6,8 @@ export class RemoveUserRequest extends DeviceRequest {
         super(connection);
     }
 
-    public async send(): Promise<RemoveUserResponse> {
-        const response = await this.get(this.relativePath);
+    public async send(opts?: { signal?: AbortSignal }): Promise<RemoveUserResponse> {
+        const response = await this.get(this.relativePath, { signal: opts?.signal });
 
         return new RemoveUserResponse(response.toString());
     }

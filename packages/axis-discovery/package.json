@@ -45,11 +45,12 @@
   },
   "dependencies": {
     "@fantasticfiasco/expect": "1.1.0",
-    "axis-discovery-bonjour": "3.0.0",
-    "axis-discovery-ssdp": "8.0.1",
+    "axis-discovery-bonjour": "file:../axis-discovery-bonjour",
+    "axis-discovery-ssdp": "file:../axis-discovery-ssdp",
     "debug": "4.4.0"
   },
   "devDependencies": {
+    "@tsconfig/node20": "^20.1.6",
     "@types/debug": "4.1.12",
     "@types/jest": "29.5.14",
     "@types/node": "22.10.2",

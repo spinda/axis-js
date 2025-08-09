@@ -20,8 +20,8 @@ export class RequestError extends Error {
         /**
          * Gets the error code, like `ECONNREFUSED`.
          */
-        readonly code?: string
+        readonly code?: string,
     ) {
-        super(message);
+        super(message || 'Axis device request error');
     }
 }

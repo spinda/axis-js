@@ -24,11 +24,23 @@ export class Parameters {
      * @throws {UnauthorizedError} User is not authorized to perform operation.
      * @throws {RequestError} Request failed.
      */
-    public async get(...parameterGroups: string[]): Promise<{ [name: string]: string }> {
-        expect.toBeTrue(parameterGroups.length > 0, 'At least one parameter group must be specied');
+    public async get(...parameterGroups: string[]): Promise<{ [name: string]: string }>;
+    public async get(opts: { signal?: AbortSignal }, ...parameterGroups: string[]): Promise<{ [name: string]: string }>;
+    public async get(optsOrFirstGroup: { signal?: AbortSignal } | string, ...parameterGroups: string[]): Promise<{ [name: string]: string }> {
+        let opts: { signal?: AbortSignal } | undefined;
+        let groups: string[];
+        
+        if (typeof optsOrFirstGroup === 'string') {
+            groups = [optsOrFirstGroup, ...parameterGroups];
+        } else {
+            opts = optsOrFirstGroup;
+            groups = parameterGroups;
+        }
+        
+        expect.toBeTrue(groups.length > 0, 'At least one parameter group must be specied');
 
-        const request = new GetParametersRequest(this.connection, ...parameterGroups);
-        const response = await request.send();
+        const request = new GetParametersRequest(this.connection, ...groups);
+        const response = await request.send({ signal: opts?.signal });
 
         response.assertSuccess();
 
@@ -43,11 +55,11 @@ export class Parameters {
      * @throws {UnauthorizedError} User is not authorized to perform operation.
      * @throws {RequestError} Request failed.
      */
-    public async update(parameters: { [name: string]: string }): Promise<void> {
+    public async update(parameters: { [name: string]: string }, opts?: { signal?: AbortSignal }): Promise<void> {
         expect.toBeTrue(Object.keys(parameters).length > 0, 'At least one parameter must be specified');
 
         const request = new UpdateParametersRequest(this.connection, parameters);
-        const response = await request.send();
+        const response = await request.send({ signal: opts?.signal });
 
         response.assertSuccess();
     }

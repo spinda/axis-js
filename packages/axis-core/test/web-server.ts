@@ -1,6 +1,6 @@
-import * as express from 'express';
+import express from 'express';
 import { AddressInfo, Server } from 'net';
-import * as passport from 'passport';
+import passport from 'passport';
 import { BasicStrategy, DigestStrategy } from 'passport-http';
 
 export class WebServer {

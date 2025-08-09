@@ -7,8 +7,8 @@ export class FactoryDefaultRequest extends DeviceRequest {
         super(connection);
     }
 
-    public async send(): Promise<FactoryDefaultResponse> {
-        const response = await this.get(this.relativePath);
+    public async send(opts?: { signal?: AbortSignal }): Promise<FactoryDefaultResponse> {
+        const response = await this.get(this.relativePath, { signal: opts?.signal });
 
         return new FactoryDefaultResponse(response.toString(), this.type);
     }
