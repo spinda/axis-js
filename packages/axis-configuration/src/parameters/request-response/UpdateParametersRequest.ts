@@ -9,19 +9,13 @@ export class UpdateParametersRequest extends DeviceRequest {
         this.parameters = parameters;
     }
 
-    public async send(): Promise<UpdateParametersResponse> {
-        const response = await this.get(this.relativePath);
-
+    public async send(opts?: { signal?: AbortSignal }): Promise<UpdateParametersResponse> {
+        const response = await this.post(this.relativePath, new URLSearchParams({
+            ...this.parameters,
+            action: 'update',
+        }), { signal: opts?.signal });
         return new UpdateParametersResponse(response.toString());
     }
 
-    public get relativePath(): string {
-        const parameterArguments = Object.keys(this.parameters)
-            .map((name) => {
-                return name + '=' + this.parameters[name];
-            })
-            .join('&');
-
-        return `/axis-cgi/param.cgi?action=update&${parameterArguments}`;
-    }
+    public readonly relativePath = '/axis-cgi/param.cgi';
 }

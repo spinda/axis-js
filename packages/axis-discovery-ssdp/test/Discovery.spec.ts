@@ -254,7 +254,7 @@ describe('Discovery', () => {
 // 'os.networkInterfaces()' which in these tests is a mocked package, and which hasn't been
 // initialized before the imports are executed.
 const createDiscovery = async () => {
-    const module = await import('../src/Discovery');
+    const module = await import('../src/Discovery.js');
     return new module.Discovery();
 };
 

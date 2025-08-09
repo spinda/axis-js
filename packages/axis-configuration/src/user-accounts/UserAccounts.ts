@@ -11,70 +11,70 @@ import { UpdateUserRequest } from './request-response/UpdateUserRequest';
  * information and remove a user account.
  */
 export class UserAccounts {
-    /**
-     * Initializes a new instance of the class.
-     * @param connection The connection to the device.
-     */
-    constructor(private readonly connection: Connection) {}
+  /**
+   * Initializes a new instance of the class.
+   * @param connection The connection to the device.
+   */
+  constructor(private readonly connection: Connection) {}
 
-    /**
-     * Adds a new user.
-     * @param user The user to add. Please note that the password must be specified.
-     * @throws {UserAlreadyExistsError} User already exists.
-     * @throws {UnauthorizedError} User is not authorized to perform operation.
-     * @throws {RequestError} Request failed.
-     * @throws {UnknownError} Error cause is unknown.
-     */
-    public async add(user: User): Promise<void> {
-        expect.toExist(user.password, 'Password must be specified.');
+  /**
+   * Adds a new user.
+   * @param user The user to add. Please note that the password must be specified.
+   * @throws {UserAlreadyExistsError} User already exists.
+   * @throws {UnauthorizedError} User is not authorized to perform operation.
+   * @throws {RequestError} Request failed.
+   * @throws {UnknownError} Error cause is unknown.
+   */
+  public async add(user: User, opts?: { group?: string; signal?: AbortSignal }): Promise<void> {
+    expect.toExist(user.password, 'Password must be specified.');
 
-        const request = new AddUserRequest(this.connection, user);
-        const response = await request.send();
+    const request = new AddUserRequest(this.connection, user, opts?.group);
+    const response = await request.send({ signal: opts?.signal });
 
-        response.assertSuccess();
-    }
+    response.assertSuccess();
+  }
 
-    /**
-     * Gets all users.
-     * @throws {UnauthorizedError} User is not authorized to perform operation.
-     * @throws {RequestError} Request failed.
-     */
-    public async getAll(): Promise<User[]> {
-        const request = new GetUsersRequest(this.connection);
-        const response = await request.send();
+  /**
+   * Gets all users.
+   * @throws {UnauthorizedError} User is not authorized to perform operation.
+   * @throws {RequestError} Request failed.
+   */
+  public async getAll(opts?: { signal?: AbortSignal }): Promise<User[]> {
+    const request = new GetUsersRequest(this.connection);
+    const response = await request.send({ signal: opts?.signal });
 
-        response.assertSuccess();
+    response.assertSuccess();
 
-        return response.users;
-    }
+    return response.users;
+  }
 
-    /**
-     * Updates a user.
-     * @param user The user to update. Please note that the password must be specified.
-     * @throws {UnauthorizedError} User is not authorized to perform operation.
-     * @throws {RequestError} Request failed.
-     * @throws {UnknownError} Error cause is unknown.
-     */
-    public async update(user: User): Promise<void> {
-        expect.toExist(user.password, 'Password must be specified.');
+  /**
+   * Updates a user.
+   * @param user The user to update. Please note that the password must be specified.
+   * @throws {UnauthorizedError} User is not authorized to perform operation.
+   * @throws {RequestError} Request failed.
+   * @throws {UnknownError} Error cause is unknown.
+   */
+  public async update(user: User, opts?: { signal?: AbortSignal }): Promise<void> {
+    expect.toExist(user.password, 'Password must be specified.');
 
-        const request = new UpdateUserRequest(this.connection, user);
-        const response = await request.send();
+    const request = new UpdateUserRequest(this.connection, user);
+    const response = await request.send({ signal: opts?.signal });
 
-        response.assertSuccess();
-    }
+    response.assertSuccess();
+  }
 
-    /**
-     * Removes a user.
-     * @param username The name of the user to remove.
-     * @throws {UnauthorizedError} User is not authorized to perform operation.
-     * @throws {RequestError} Request failed.
-     * @throws {UnknownError} Error cause is unknown.
-     */
-    public async remove(username: string): Promise<void> {
-        const request = new RemoveUserRequest(this.connection, username);
-        const response = await request.send();
+  /**
+   * Removes a user.
+   * @param username The name of the user to remove.
+   * @throws {UnauthorizedError} User is not authorized to perform operation.
+   * @throws {RequestError} Request failed.
+   * @throws {UnknownError} Error cause is unknown.
+   */
+  public async remove(username: string, opts?: { signal?: AbortSignal }): Promise<void> {
+    const request = new RemoveUserRequest(this.connection, username);
+    const response = await request.send({ signal: opts?.signal });
 
-        response.assertSuccess();
-    }
+    response.assertSuccess();
+  }
 }

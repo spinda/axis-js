@@ -10,8 +10,8 @@ export class GetParametersRequest extends DeviceRequest {
         this.parameterGroups = parameterGroups;
     }
 
-    public async send(): Promise<GetParametersResponse> {
-        const response = await this.get(this.relativePath);
+    public async send(opts?: { signal?: AbortSignal }): Promise<GetParametersResponse> {
+        const response = await this.get(this.relativePath, { signal: opts?.signal });
 
         return new GetParametersResponse(response.toString());
     }

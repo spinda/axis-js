@@ -4,20 +4,30 @@ import { AddUserResponse } from './AddUserResponse';
 import { Converter } from './Converter';
 
 export class AddUserRequest extends DeviceRequest {
-    constructor(connection: Connection, private readonly user: User) {
-        super(connection);
-    }
+  constructor(
+    connection: Connection,
+    private readonly user: User,
+    private readonly group: string = 'users',
+  ) {
+    super(connection);
+  }
 
-    public async send(): Promise<AddUserResponse> {
-        const response = await this.get(this.relativePath);
+  public async send(opts?: { signal?: AbortSignal }): Promise<AddUserResponse> {
+    const response = await this.get(this.relativePath, { signal: opts?.signal });
 
-        return new AddUserResponse(response.toString());
-    }
+    return new AddUserResponse(response.toString());
+  }
 
-    public get relativePath(): string {
-        return `/axis-cgi/pwdgrp.cgi?action=add&user=${this.user.name}&pwd=${this.user.password}&grp=users&sgrp=${Converter.toUserGroups(
-            this.user.accessRights,
-            this.user.ptz
-        )}&comment=${this.user.name}`;
-    }
+  public get relativePath(): string {
+    return '/axis-cgi/pwdgrp.cgi?action=add'
+      + `&user=${encodeURIComponent(this.user.name)}`
+      + (this.user.password != null ? `&pwd=${encodeURIComponent(this.user.password)}` : '')
+      + `&grp=${encodeURIComponent(this.group)}`
+      + `&sgrp=${
+        Converter.toUserGroups(
+          this.user.accessRights,
+          this.user.ptz,
+        )
+      }`;
+  }
 }

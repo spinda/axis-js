@@ -1,4 +1,4 @@
-import { HTTPError } from 'got';
+import { HTTPError } from 'got-cjs-compat';
 import { URL } from 'url';
 import { Connection, get, Protocol } from '../src';
 import { WebServer } from './web-server';
@@ -30,7 +30,7 @@ describe('#get should', () => {
 
     test('succeed given basic authentication', async () => {
         // Arrange
-        const { connection, relativePath } = parseUrl(webServer.guestUri, webServer.username, webServer.password);
+        const { connection, relativePath } = parseUrl(webServer.basicAuthUri, webServer.username, webServer.password);
 
         // Act
         const got = await get(connection, relativePath);

@@ -10,8 +10,15 @@ export class UpdateParametersError extends Error {
         /**
          * Gets the names of parameters that couldn't be updated.
          */
-        public readonly parameterNames: string[]
+        public readonly parameterNames: string[],
     ) {
-        super();
+        const humanReadableParameterNames = parameterNames.map((parameterName) =>
+            JSON.stringify(parameterName)
+        ).join(', ');
+        const parameterNamesPlural = parameterNames.length > 1 ? 's' : '';
+        super(
+            `Failed to set parameter${parameterNamesPlural} ${humanReadableParameterNames}`,
+        );
+        Object.setPrototypeOf(this, UpdateParametersError.prototype);
     }
 }

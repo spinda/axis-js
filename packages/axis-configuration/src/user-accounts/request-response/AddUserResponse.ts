@@ -1,7 +1,7 @@
-import { DeviceResponse, UnknownError } from 'axis-core';
+import { HtmlDeviceResponse, UnknownError } from 'axis-core';
 import { UserAlreadyExistsError } from '../..';
 
-export class AddUserResponse extends DeviceResponse {
+export class AddUserResponse extends HtmlDeviceResponse {
     private static readonly SuccessResponse = /Created account .*\./;
     private static readonly UserAlreadyExistsResponse = /Error: this user name already exists, consult the system log file/;
 

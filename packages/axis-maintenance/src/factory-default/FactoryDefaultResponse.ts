@@ -1,7 +1,7 @@
-import { DeviceResponse, UnknownError } from 'axis-core';
+import { HtmlDeviceResponse, UnknownError } from 'axis-core';
 import { FactoryDefaultType } from './FactoryDefaultType';
 
-export class FactoryDefaultResponse extends DeviceResponse {
+export class FactoryDefaultResponse extends HtmlDeviceResponse {
     private static readonly SuccessResponsePartialType = /factoryMessage/i;
     private static readonly SuccessResponseHardType = /factoryMessage2/i;
 

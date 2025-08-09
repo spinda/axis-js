@@ -1,6 +1,6 @@
-import { DeviceResponse, UnknownError } from "axis-core";
+import { HtmlDeviceResponse, UnknownError } from "axis-core";
 
-export class RestartResponse extends DeviceResponse {
+export class RestartResponse extends HtmlDeviceResponse {
     private static readonly SuccessResponse = /restartMessage/i;
 
     constructor(response: string) {

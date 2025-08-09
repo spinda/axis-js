@@ -8,8 +8,8 @@ export class UpdateUserRequest extends DeviceRequest {
         super(connection);
     }
 
-    public async send(): Promise<UpdateUserResponse> {
-        const response = await this.get(this.relativePath);
+    public async send(opts?: { signal?: AbortSignal }): Promise<UpdateUserResponse> {
+        const response = await this.get(this.relativePath, { signal: opts?.signal });
 
         return new UpdateUserResponse(response.toString());
     }

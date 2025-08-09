@@ -1,4 +1,4 @@
-import * as debug from 'debug';
+import debug from 'debug';
 
 export function log(formatter: unknown, ...args: unknown[]): void {
     logger(formatter, ...args);

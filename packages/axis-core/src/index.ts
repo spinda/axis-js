@@ -3,5 +3,7 @@ export * from './Connection';
 export * from './DeviceRequest';
 export * from './DeviceResponse';
 export * from './errors';
+export * from './HtmlDeviceResponse';
+export * from './JsonDeviceResponse';
 export * from './Protocol';
 export * from './Response';
