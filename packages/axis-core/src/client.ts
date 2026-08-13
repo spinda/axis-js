@@ -7,6 +7,10 @@ import { clientProvider } from './auth/client-provider';
 
 export type RequestOpts = {
     /**
+     * Additional headers to attach to the request.
+     */
+    headers?: Partial<Record<string, string>>;
+    /**
      * Whether or not the request may be retried. Defaults to `true`.
      */
     retry?: boolean;
@@ -86,6 +90,13 @@ export const post = (
         postOpts.body = body;
     } else {
         postOpts.json = body;
+    }
+
+    if (opts?.headers) {
+        postOpts.headers = {
+            ...postOpts.headers,
+            ...opts.headers,
+        };
     }
 
     return client.post(url, postOpts);
