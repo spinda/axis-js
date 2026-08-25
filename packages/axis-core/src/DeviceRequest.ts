@@ -5,6 +5,17 @@ import { RequestError, UnauthorizedError } from './errors';
 
 export { RequestOpts };
 
+const maxResponseBodyLength = 4096;
+const addResponseBodyToErrorMessage = (message: string, body: unknown): string => {
+    if (typeof body === 'string') {
+        return message + ': ' + body.slice(0, maxResponseBodyLength);
+    } else if (Buffer.isBuffer(body)) {
+        return message + ': ' + body.toString('utf8', 0, maxResponseBodyLength);
+    } else {
+        return message;
+    }
+};
+
 /**
  * Abstract class describing a HTTP request.
  */
@@ -33,7 +44,12 @@ export abstract class DeviceRequest {
                 throw new UnauthorizedError();
             }
             if (error instanceof got.RequestError) {
-                throw new RequestError(error, error.message, error.code);
+                error.response?.body
+                throw new RequestError(
+                    error,
+                    addResponseBodyToErrorMessage(error.message, error.response?.body),
+                    error.code,
+                );
             }
 
             // Fallback
@@ -59,7 +75,11 @@ export abstract class DeviceRequest {
                 throw new UnauthorizedError();
             }
             if (error instanceof got.RequestError) {
-                throw new RequestError(error, error.message, error.code);
+                throw new RequestError(
+                    error,
+                    addResponseBodyToErrorMessage(error.message, error.response?.body),
+                    error.code,
+                );
             }
 
             // Fallback
