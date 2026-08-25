@@ -1,7 +1,12 @@
 /**
- * Error thrown when a request fail.
+ * Error thrown when a request fails.
  */
 export class RequestError extends Error {
+    /**
+     * Gets the underlying HTTP error.
+     */
+    declare readonly error: unknown;
+
     /**
      * Initializes a new instance of the class.
      * @param error The error.
@@ -9,13 +14,7 @@ export class RequestError extends Error {
      * @param code The error code, like `ECONNREFUSED`.
      */
     constructor(
-        /**
-         * Gets the error.
-         */
-        readonly error: unknown,
-        /**
-         * Gets the error message.
-         */
+        error: unknown,
         message?: string,
         /**
          * Gets the error code, like `ECONNREFUSED`.
@@ -23,5 +22,12 @@ export class RequestError extends Error {
         readonly code?: string,
     ) {
         super(message || 'Axis device request error');
+
+        Object.defineProperty(this, 'error', {
+            value: error,
+            enumerable: false,
+            writable: false,
+            configurable: true,
+        });
     }
 }
