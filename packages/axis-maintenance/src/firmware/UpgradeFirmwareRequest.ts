@@ -2,6 +2,7 @@ import { randomBytes } from 'node:crypto';
 import fs from 'node:fs';
 import { Readable } from 'node:stream';
 import { Connection, DeviceRequest } from 'axis-core';
+import { FactoryDefaultType } from '../factory-default/FactoryDefaultType';
 import { UpgradeFirmwareParams } from './UpgradeFirmwareParams';
 import { UpgradeFirmwareResponse } from './UpgradeFirmwareResponse';
 
@@ -15,10 +16,40 @@ export class UpgradeFirmwareRequest extends DeviceRequest {
     }
 
     public async send(opts?: { signal?: AbortSignal }): Promise<UpgradeFirmwareResponse> {
+        const { factoryDefaultMode: rawFactoryDefaultMode, ...params } = this.params ?? {};
+        let factoryDefaultMode: 'soft' | 'hard' | undefined;
+        switch (rawFactoryDefaultMode) {
+            case FactoryDefaultType.Partial: {
+                factoryDefaultMode = 'soft';
+                break;
+            }
+            case FactoryDefaultType.Hard: {
+                factoryDefaultMode = 'hard';
+                break;
+            }
+            case null:
+            case undefined: {
+                break;
+            }
+            default: {
+                rawFactoryDefaultMode satisfies never;
+                throw new Error(`Unrecognized factory default mode: ${rawFactoryDefaultMode}`);
+            }
+        }
+
         const data = {
             apiVersion: '1.0',
             method: 'upgrade',
-            ...(this.params ? { params: this.params } : null),
+            ...(
+                (Object.keys(params).length > 0 || factoryDefaultMode != null)
+                    ? {
+                        params: {
+                            ...params,
+                            ...(factoryDefaultMode != null ? { factoryDefaultMode } : null),
+                        }
+                    }
+                    : null
+            ),
         };
 
         // The firmware management API is very particular about the HTTP request format it will
